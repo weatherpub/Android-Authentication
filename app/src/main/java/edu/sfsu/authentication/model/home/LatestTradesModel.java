@@ -1,5 +1,11 @@
 package edu.sfsu.authentication.model.home;
 
+/* File LatestTradesModel.java
+ * Developer Patrick
+ * Purpose
+ * This file will hold the data returned from the JSON request.
+ * */
+
 public class LatestTradesModel {
     private String trades;
     private String c;
