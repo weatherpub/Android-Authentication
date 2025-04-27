@@ -26,6 +26,8 @@ public class LatestTradesModel {
         this.z = z;
     }
 
+    public LatestTradesModel() {}
+
     public String getTrades() {
         return trades;
     }
