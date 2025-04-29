@@ -49,6 +49,8 @@ public class HomeViewModel extends ViewModel {
      */
     private ArrayList<LatestTradesModel> model = viewModel.getModel();
 
+    // liveData = viewModel.getModel();
+
     public MutableLiveData<ArrayList<LatestTradesModel>> getMutableLiveData() {
         return new MutableLiveData<>();
     }
