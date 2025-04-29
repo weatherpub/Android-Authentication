@@ -15,18 +15,21 @@ import edu.sfsu.authentication.databinding.FragmentHomeBinding;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    HomeViewModel homeViewModel; // get
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // ViewModelProvider a utility class that provides ViewModels for a scope.
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+
+        View view = binding.getRoot(); // Renamed 'View root' to 'View view'.
 
         final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+
+       // homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+        return view;
     }
 
     @Override
