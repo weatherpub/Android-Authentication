@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import edu.sfsu.authentication.model.home.LatestTradesModel;
 
 /**
+ * Design Pattern Singleton
  * The goal of this file is to return a single instance of LatestTradesViewModel
  */
 
@@ -13,14 +14,27 @@ public class LatestTradesViewModel {
     // instantiate new object
     private static final LatestTradesViewModel obj = new LatestTradesViewModel();
 
+    // an ArrayList of "LatestTradesModel's"
     private final ArrayList<LatestTradesModel> model;
-
-    // return an instance of this object
+    /**
+     * Return an instance of this object, can only be one.
+     *
+     * When a variable is declared static in Java, the variable belongs to
+     * the class itself rather than to any specific instance of the class.
+     *
+     * Static methods are methods that belong to the class rather than to any specific instance of the class.
+     * Static methods can be called directly on the class itself without needing to create an instance of the class itself.
+     *
+     * Called in HomeViewModel:
+     * private LatestTradesViewModel viewModel = LatestViewModel.getInstance();
+     */
     public static LatestTradesViewModel getInstance() {
         return obj;
     }
 
-    // Constructor is private to facilitate a closed system. only LatestTradesModel can access it.
+    // Constructor is private to facilitate a closed system.
+    // cannot be instantiated
+    // only LatestTradesModel can access it.
     private LatestTradesViewModel() {
         model = new ArrayList<>();
     }
