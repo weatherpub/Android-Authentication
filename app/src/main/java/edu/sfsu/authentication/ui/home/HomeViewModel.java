@@ -25,17 +25,24 @@ import okhttp3.Response;
  * meaning it respects the lifecycle of other app components, such as activities, fragments, or services.
  * This awareness ensures LiveData only updates app component observers that are iin an active lifecycle state.
  * .
- * Android App Architecture
- * <a href="https://developer.android.com/topic/libraries/architecture/livedata">...</a>
+ * Android App Architecture https://developer.android.com/topic/libraries/architecture/livedata
  *
- * Purpose of the HomeViewModel
- * The HomeViewModel provides data to HomeViewFragment, by way of AsyncTask
+ * Update LiveData objects
+ * LiveData has no publicly available methods to update the stored data.
+ *
+ * The MutableLiveData class exposes the setValue(T) and postValue(T) methods
+ * publicly and you must use these if you need to edit the value stored in a LiveView object.
+ * Usually MutableLiveData is used in the viewModel and then the ViewModel only exposes immutable
+ * LiveData objects to the observers.
  **/
 
 public class HomeViewModel extends ViewModel {
 
     // create a new MutableLiveData object
     private MutableLiveData<ArrayList<LatestTradesModel>> liveData;
+
+    // Try this when all is working.
+    // private MutableLiveData<LatestTradesModel> liveData;
 
     /**
      * LatestTradesViewModel.getInstance()
