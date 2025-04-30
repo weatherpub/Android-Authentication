@@ -37,9 +37,10 @@ import okhttp3.Response;
  **/
 
 public class HomeViewModel extends ViewModel {
-
-    // create a new MutableLiveData object
+    // Create a new MutableLiveData object
+    // 04.29.25 - I made MutableLiveData not contain an ArrayList<Latest..
     private MutableLiveData<ArrayList<LatestTradesModel>> liveData;
+    // private MutableLiveData<LatestTradesModel> liveData;
 
     // Try this when all is working.
     // private MutableLiveData<LatestTradesModel> liveData;
@@ -58,14 +59,18 @@ public class HomeViewModel extends ViewModel {
 
     // liveData = viewModel.getModel();
 
+    /*
+    I am going to remove this, because I used the method already defined in LatestTradeViewModel
     public MutableLiveData<ArrayList<LatestTradesModel>> getMutableLiveData() {
         return new MutableLiveData<>();
     }
+    */
 
     // constructor
     public HomeViewModel() {
         Log.i("log", "[ DashboardViewModel loaded ]");
-        liveData = getMutableLiveData();
+    //    liveData = getMutableLiveData();
+        liveData = viewModel.getMutableLiveData(); // viewModel is defined above, so I might as well use it. I commented out getMutableLiveData above.
         new LatestTradesAsyncTask().execute("https://data.alpaca.markets/v2/stocks/trades/latest?symbols=AAPL");
     }
 
