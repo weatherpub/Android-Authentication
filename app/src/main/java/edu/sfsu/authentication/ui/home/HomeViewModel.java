@@ -17,7 +17,6 @@ import edu.sfsu.authentication.model.home.DrinkModel;
 import edu.sfsu.authentication.vm.DrinkViewModel;
 import okhttp3.OkHttpClient;
 
-import edu.sfsu.authentication.model.home.LatestTradesModel;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -59,14 +58,15 @@ public class HomeViewModel extends ViewModel {
     // private final ArrayList<LatestTradesModel> model = viewModel.getModel();
     private final ArrayList<DrinkModel> model = viewModel.getModel();
     /*
-    * This method: MutableLiveData<ArrayList<LatestTradesModel>> has to be part of this class.
-    * */
+     * This method: MutableLiveData<ArrayList<LatestTradesModel>> has to be part of this class.
+     * */
     /*
     public MutableLiveData<ArrayList<LatestTradesModel>> getMutableLiveData() {
         return new MutableLiveData<>();
     }
     */
 
+    // this has been updated for the DrinkModel
     public MutableLiveData<ArrayList<DrinkModel>> getMutableLiveData() {
         return new MutableLiveData<>();
     }
@@ -108,6 +108,8 @@ public class HomeViewModel extends ViewModel {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+            Log.i("log", "result  " + result.toString());
+
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray obj = jsonObject.getJSONArray("drinks");
@@ -118,17 +120,58 @@ public class HomeViewModel extends ViewModel {
                 for(int i = 0; i < obj.length(); i++) {
                     Log.i("log", "for loop => " + i);
 
-                    /*
-                    model.add(new LatestTradesModel(
-                            obj.getJSONObject(i).getString("trades"),
-                            obj.getJSONObject(i).getString("c"),
-                            obj.getJSONObject(i).getString("i"),
-                            obj.getJSONObject(i).getString("p"),
-                            obj.getJSONObject(i).getString("s"),
-                            obj.getJSONObject(i).getString("t"),
-                            obj.getJSONObject(i).getString("x"),
-                            obj.getJSONObject(i).getString("z")));
-                     */
+                    model.add(new DrinkModel(
+                            obj.getJSONObject(i).getString("idDrink"),
+                            obj.getJSONObject(i).getString("strDrink"),
+                            obj.getJSONObject(i).getString("strDrinkAlternate"),
+                            obj.getJSONObject(i).getString("strTags"),
+                            obj.getJSONObject(i).getString("strVideo"),
+                            obj.getJSONObject(i).getString("strCategory"),
+                            obj.getJSONObject(i).getString("strIBA"),
+                            obj.getJSONObject(i).getString("strAlcoholic"),
+                            obj.getJSONObject(i).getString("strGlass"),
+                            obj.getJSONObject(i).getString("strInstructions"),
+                            obj.getJSONObject(i).getString("strInstructionsES"),
+                            obj.getJSONObject(i).getString("strInstructionsDE"),
+                            obj.getJSONObject(i).getString("strInstructionsFR"),
+                            obj.getJSONObject(i).getString("strInstructionsIT"),
+                            obj.getJSONObject(i).getString("strInstructionsZH-HANS"),
+                            obj.getJSONObject(i).getString("strInstructionsZH-HANT"),
+                            obj.getJSONObject(i).getString("strDrinkThumb"),
+                            obj.getJSONObject(i).getString("strIngredient1"),
+                            obj.getJSONObject(i).getString("strIngredient2"),
+                            obj.getJSONObject(i).getString("strIngredient3"),
+                            obj.getJSONObject(i).getString("strIngredient4"),
+                            obj.getJSONObject(i).getString("strIngredient5"),
+                            obj.getJSONObject(i).getString("strIngredient6"),
+                            obj.getJSONObject(i).getString("strIngredient7"),
+                            obj.getJSONObject(i).getString("strIngredient8"),
+                            obj.getJSONObject(i).getString("strIngredient9"),
+                            obj.getJSONObject(i).getString("strIngredient10"),
+                            obj.getJSONObject(i).getString("strIngredient11"),
+                            obj.getJSONObject(i).getString("strIngredient12"),
+                            obj.getJSONObject(i).getString("strIngredient13"),
+                            obj.getJSONObject(i).getString("strIngredient14"),
+                            obj.getJSONObject(i).getString("strIngredient15"),
+                            obj.getJSONObject(i).getString("strMeasure1"),
+                            obj.getJSONObject(i).getString("strMeasure2"),
+                            obj.getJSONObject(i).getString("strMeasure3"),
+                            obj.getJSONObject(i).getString("strMeasure4"),
+                            obj.getJSONObject(i).getString("strMeasure5"),
+                            obj.getJSONObject(i).getString("strMeasure6"),
+                            obj.getJSONObject(i).getString("strMeasure7"),
+                            obj.getJSONObject(i).getString("strMeasure8"),
+                            obj.getJSONObject(i).getString("strMeasure9"),
+                            obj.getJSONObject(i).getString("strMeasure10"),
+                            obj.getJSONObject(i).getString("strMeasure11"),
+                            obj.getJSONObject(i).getString("strMeasure12"),
+                            obj.getJSONObject(i).getString("strMeasure13"),
+                            obj.getJSONObject(i).getString("strMeasure14"),
+                            obj.getJSONObject(i).getString("strMeasure15"),
+                            obj.getJSONObject(i).getString("strImageSource"),
+                            obj.getJSONObject(i).getString("strImageAttribution"),
+                            obj.getJSONObject(i).getString("strCreativeCommonsConfirmed"),
+                            obj.getJSONObject(i).getString("dateModified")));
                 }
             } catch (JSONException e) {
                 throw new RuntimeException(e);
@@ -136,35 +179,4 @@ public class HomeViewModel extends ViewModel {
             liveData.setValue(model);
         }
     }
-
-        /*
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray obj = jsonObject.getJSONArray("album");
-
-                Log.i("log", "onPostExecute() => ");
-
-                // Create a model for each object returned from the json results.
-                for(int i = 0; i < obj.length(); i++) {
-                    Log.i("log", "for loop => " + i);
-
-                    model.add(new LatestTradesModel(
-                            obj.getJSONObject(i).getString("trades"),
-                            obj.getJSONObject(i).getString("c"),
-                            obj.getJSONObject(i).getString("i"),
-                            obj.getJSONObject(i).getString("p"),
-                            obj.getJSONObject(i).getString("s"),
-                            obj.getJSONObject(i).getString("t"),
-                            obj.getJSONObject(i).getString("x"),
-                            obj.getJSONObject(i).getString("z")));
-                }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-            liveData.setValue(model);
-        }
-        */
-    }
+}
