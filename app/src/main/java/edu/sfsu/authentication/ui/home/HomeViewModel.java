@@ -37,25 +37,22 @@ import okhttp3.Response;
  **/
 
 public class HomeViewModel extends ViewModel {
-    // Create a new MutableLiveData object
-    // 04.29.25 - I made MutableLiveData not contain an ArrayList<Latest..
-    private MutableLiveData<ArrayList<LatestTradesModel>> liveData;
-    // private MutableLiveData<LatestTradesModel> liveData;
+    // Create an instance of LiveData to hold a certain type of data.
+    // This is usually done within your ViewModel Class.
 
-    // Try this when all is working.
-    // private MutableLiveData<LatestTradesModel> liveData;
+    private MutableLiveData<ArrayList<LatestTradesModel>> liveData;
 
     /**
      * LatestTradesViewModel.getInstance()
      * Singleton at work, we only get one instance of the object.
      * (this ensures we are dealing the same data set throughout the app)
      */
-    private LatestTradesViewModel viewModel = LatestTradesViewModel.getInstance();
+    private final LatestTradesViewModel viewModel = LatestTradesViewModel.getInstance();
 
     /**
      * Get a copy of the model, which contains the request.
      */
-    private ArrayList<LatestTradesModel> model = viewModel.getModel();
+    private final ArrayList<LatestTradesModel> model = viewModel.getModel();
 
     // liveData = viewModel.getModel();
 
