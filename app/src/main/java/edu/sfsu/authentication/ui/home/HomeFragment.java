@@ -22,6 +22,12 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     int i = 0;
 
+    /**
+     * In most cases, an app compontent's onCreate(0 method is the right place to begin observing
+     * a LiveData object for the following reasons:
+     * To ensure the system doesn't make redundant calls from an activity or fragment's onResume() method.
+     * To ensure that the activity or fragment has data that it can display as soon as it becomes active.
+     */
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // ViewModelProvider a utility class that provides ViewModels for a scope.
         // HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class); // this uses HomeViewModel.java
@@ -31,15 +37,68 @@ public class HomeFragment extends Fragment {
 
         View view = binding.getRoot(); // Renamed 'View root' to 'View view'.
 
+        // update the UI
         final Observer<ArrayList<DrinkModel>> listObserver = new Observer<ArrayList<DrinkModel>>() {
             @Override
-            public void onChanged(ArrayList<DrinkModel> drinkModel) {
-                drinkModel.get(i).getIdDrink();
+            public void onChanged(ArrayList<DrinkModel> m) {
+                m.get(i).setIdDrink("100000");
+                m.get(i).setStrDrink("Beer");
+                m.get(i).setStrDrinkAlternate("Lemon Aid");
+                m.get(i).setStrTags("Beer Tag");
+
+                /*
+                m.get(i).setStrVideo();
+                m.get(i).setStrCategory();
+                m.get(i).setStrIBA();
+                m.get(i).setStrAlcoholic();
+                m.get(i).setStrGlass();
+                m.get(i).setStrInstructions();
+                m.get(i).setStrInstructionsES();
+                m.get(i).setStrInstructionsDE();
+                m.get(i).setStrInstructionsFR();
+                m.get(i).setStrInstructionsIT();
+                m.get(i).setStrInstructionsZH_HANS();
+                m.get(i).setStrInstructionsZH_HANT();
+                m.get(i).setStrIngredient1();
+                m.get(i).setStrIngredient2();
+                m.get(i).setStrIngredient3();
+                m.get(i).setStrIngredient4();
+                m.get(i).setStrIngredient5();
+                m.get(i).setStrIngredient6();
+                m.get(i).setStrIngredient7();
+                m.get(i).setStrIngredient8();
+                m.get(i).setStrIngredient9();
+                m.get(i).setStrIngredient10();
+                m.get(i).setStrIngredient11();
+                m.get(i).setStrIngredient12();
+                m.get(i).setStrIngredient13();
+                m.get(i).setStrIngredient14();
+                m.get(i).setStrIngredient15();
+                m.get(i).setStrMeasure1();
+                m.get(i).setStrMeasure2();
+                m.get(i).setStrMeasure3();
+                m.get(i).setStrMeasure4();
+                m.get(i).setStrMeasure5();
+                m.get(i).setStrMeasure6();
+                m.get(i).setStrMeasure7();
+                m.get(i).setStrMeasure8();
+                m.get(i).setStrMeasure9();
+                m.get(i).setStrMeasure10();
+                m.get(i).setStrMeasure11();
+                m.get(i).setStrMeasure12();
+                m.get(i).setStrMeasure13();
+                m.get(i).setStrMeasure14();
+                m.get(i).setStrMeasure15();
+                */
+
+                m.get(i).setStrImageSource("https://commons.wikimedia.org/wiki/File:Klassiche_Margarita.jpg");
+                m.get(i).setStrImageAttribution("Beer Thing");
+                m.get(i).setStrCreativeCommonsConfirmed("No");
+                m.get(i).setDateModified("04-29-25");
             }
         };
 
-        /**
-         * Reserved for RecyclerView implementation
+        /*
         homeViewModel.getMutableLiveData().observe(getViewLifecycleOwner(), data -> {
             binding.rvHomeFragment.setAdapter(recyclerViewAdapter);
             binding.rvHomeFragment.setLayoutManager(new LinearLayoutManager(getContext()));
