@@ -42,4 +42,11 @@ public class LatestTradesViewModel {
     public ArrayList<LatestTradesModel> getModel() {
         return model;
     }
+
+    // return a new MutableLiveData Object
+    /*
+    public MutableLiveData<ArrayList<LatestTradesModel>> getMutableLiveData() {
+        return new MutableLiveData<>();
+    }
+     */
 }
