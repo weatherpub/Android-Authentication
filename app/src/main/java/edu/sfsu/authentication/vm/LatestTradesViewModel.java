@@ -11,7 +11,7 @@ import edu.sfsu.authentication.model.home.LatestTradesModel;
 
 public class LatestTradesViewModel {
     // instantiate new object
-    private static final LatestTradesViewModel obj = new LatestTradesViewModel();
+    private static final LatestTradesViewModel latestTradesViewModel = new LatestTradesViewModel();
 
     // an ArrayList of "LatestTradesModel's"
     private final ArrayList<LatestTradesModel> model;
@@ -28,7 +28,7 @@ public class LatestTradesViewModel {
      * private LatestTradesViewModel viewModel = LatestViewModel.getInstance();
      */
     public static LatestTradesViewModel getInstance() {
-        return obj;
+        return latestTradesViewModel;
     }
 
     // Constructor is private to facilitate a closed system.
@@ -41,10 +41,5 @@ public class LatestTradesViewModel {
     // Return a copy of the model
     public ArrayList<LatestTradesModel> getModel() {
         return model;
-    }
-
-    // return a new MutableLiveData Object
-    public MutableLiveData<ArrayList<LatestTradesModel>> getMutableLiveData() {
-        return new MutableLiveData<>();
     }
 }
