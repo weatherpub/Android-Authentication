@@ -10,7 +10,6 @@ import edu.sfsu.authentication.model.home.LatestTradesModel;
  */
 
 public class LatestTradesViewModel {
-
     // instantiate new object
     private static final LatestTradesViewModel obj = new LatestTradesViewModel();
 
@@ -45,7 +44,7 @@ public class LatestTradesViewModel {
     }
 
     // return a new MutableLiveData Object
-    public MutableLiveData<LatestTradesModel> get() {
+    public MutableLiveData<ArrayList<LatestTradesModel>> getMutableLiveData() {
         return new MutableLiveData<>();
     }
 }
