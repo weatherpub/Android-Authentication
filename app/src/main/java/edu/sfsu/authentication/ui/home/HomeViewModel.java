@@ -38,10 +38,11 @@ import okhttp3.Response;
  **/
 
 public class HomeViewModel extends ViewModel {
+//    private final MutableLiveData<ArrayList<DrinkModel>> liveData;
     // Create an instance of LiveData to hold a certain type of data.
     // This is usually done within your ViewModel Class.
     // -Android Documentation
-    private final MutableLiveData<ArrayList<DrinkModel>> liveData;
+    // private static final MutableLiveData<ArrayList<DrinkModel>> liveData;
 
     /**
      * LatestTradesViewModel.getInstance()
@@ -49,24 +50,25 @@ public class HomeViewModel extends ViewModel {
      * (this ensures we are dealing the same data set throughout the app)
      */
     // private final LatestTradesViewModel viewModel = LatestTradesViewModel.getInstance();
-    private final DrinkViewModel viewModel = DrinkViewModel.getInstance();
+    //private final DrinkViewModel viewModel = DrinkViewModel.getInstance();
 
     /**
      * Get a copy of the model, which contains the request.
      */
-    private final ArrayList<DrinkModel> model = viewModel.getModel();
+    //private final ArrayList<DrinkModel> model = viewModel.getModel();
     /*
     * This has been updated for the DrinkModel
     * This methods needs to stay in this file
     * */
-    public MutableLiveData<ArrayList<DrinkModel>> getMutableLiveData() {
+
+    static MutableLiveData<ArrayList<DrinkModel>> getMutableLiveData() {
         return new MutableLiveData<>();
     }
 
     // constructor
     public HomeViewModel() {
         Log.i("log", "[ HomeViewModel ]");
-        liveData = getMutableLiveData(); // viewModel is defined above, so I might as well use it. I commented out getMutableLiveData above.
+        //liveData = getMutableLiveData(); // viewModel is defined above, so I might as well use it. I commented out getMutableLiveData above.
         // new LatestTradesAsyncTask().execute("https://data.alpaca.markets/v2/stocks/trades/latest?symbols=AAPL");
         new LatestTradesAsyncTask().execute("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita");
     }
@@ -75,7 +77,11 @@ public class HomeViewModel extends ViewModel {
      * Nested Class can access outer variables
      */
     // public class LatestTradesAsyncTask extends AsyncTask<String, String, String> {
-    public class LatestTradesAsyncTask extends AsyncTask<String, String, String> {
+    static public class LatestTradesAsyncTask extends AsyncTask<String, String, String> {
+
+        public MutableLiveData<ArrayList<DrinkModel>> liveData = getMutableLiveData();
+        ArrayList<DrinkModel> model = DrinkViewModel.getModel();
+
         @Override
         protected String doInBackground(String... param) {
             Log.i("log", "[ doInBackground(String... param)] 1");
