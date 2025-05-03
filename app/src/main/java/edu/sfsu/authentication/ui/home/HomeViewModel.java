@@ -31,8 +31,10 @@ public class HomeViewModel extends ViewModel {
     }
 
     // Moved all the login into LatestTradesAsyncTask and made LatestTradesAsyncTask static
-    public static class LatestTradesAsyncTask extends AsyncTask<String, String, String> {
+    private static class LatestTradesAsyncTask extends AsyncTask<String, String, String> {
+
         private final MutableLiveData<ArrayList<DrinkModel>> liveData = getMutableLiveData();
+
         private final ArrayList<DrinkModel> model = DrinkViewModel.getModel();
 
         @Override
@@ -46,6 +48,7 @@ public class HomeViewModel extends ViewModel {
                 if(!response.isSuccessful())
                     return null;
 
+                assert response.body() != null;
                 return response.body().string();
             } catch(IOException e) {
                 e.printStackTrace();
