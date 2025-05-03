@@ -77,10 +77,10 @@ public class HomeViewModel extends ViewModel {
      * Nested Class can access outer variables
      */
     // public class LatestTradesAsyncTask extends AsyncTask<String, String, String> {
-    static public class LatestTradesAsyncTask extends AsyncTask<String, String, String> {
+    public static class LatestTradesAsyncTask extends AsyncTask<String, String, String> {
 
-        public MutableLiveData<ArrayList<DrinkModel>> liveData = getMutableLiveData();
-        ArrayList<DrinkModel> model = DrinkViewModel.getModel();
+        private final MutableLiveData<ArrayList<DrinkModel>> liveData = getMutableLiveData();
+        private final ArrayList<DrinkModel> model = DrinkViewModel.getModel();
 
         @Override
         protected String doInBackground(String... param) {
