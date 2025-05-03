@@ -21,6 +21,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class HomeViewModel extends ViewModel {
+
     static MutableLiveData<ArrayList<DrinkModel>> getMutableLiveData() {
         return new MutableLiveData<>();
     }

@@ -27,7 +27,7 @@ public class LatestTradesViewModel {
      * Called in HomeViewModel:
      * private LatestTradesViewModel viewModel = LatestViewModel.getInstance();
      */
-    public static LatestTradesViewModel getInstance() {
+    private static LatestTradesViewModel getInstance() {
         return latestTradesViewModel;
     }
 
