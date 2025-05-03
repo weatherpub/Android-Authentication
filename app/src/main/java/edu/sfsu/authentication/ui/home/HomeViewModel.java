@@ -41,7 +41,6 @@ public class HomeViewModel extends ViewModel {
     // Create an instance of LiveData to hold a certain type of data.
     // This is usually done within your ViewModel Class.
     // -Android Documentation
-    //private final MutableLiveData<ArrayList<LatestTradesModel>> liveData;
     private final MutableLiveData<ArrayList<DrinkModel>> liveData;
 
     /**
@@ -55,18 +54,11 @@ public class HomeViewModel extends ViewModel {
     /**
      * Get a copy of the model, which contains the request.
      */
-    // private final ArrayList<LatestTradesModel> model = viewModel.getModel();
     private final ArrayList<DrinkModel> model = viewModel.getModel();
     /*
-     * This method: MutableLiveData<ArrayList<LatestTradesModel>> has to be part of this class.
-     * */
-    /*
-    public MutableLiveData<ArrayList<LatestTradesModel>> getMutableLiveData() {
-        return new MutableLiveData<>();
-    }
-    */
-
-    // this has been updated for the DrinkModel
+    * This has been updated for the DrinkModel
+    * This methods needs to stay in this file
+    * */
     public MutableLiveData<ArrayList<DrinkModel>> getMutableLiveData() {
         return new MutableLiveData<>();
     }
@@ -82,6 +74,7 @@ public class HomeViewModel extends ViewModel {
     /**
      * Nested Class can access outer variables
      */
+    // public class LatestTradesAsyncTask extends AsyncTask<String, String, String> {
     public class LatestTradesAsyncTask extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... param) {
@@ -108,17 +101,18 @@ public class HomeViewModel extends ViewModel {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            Log.i("log", "result  " + result.toString());
+            Log.i("log", "[ onPostExecute(String result) ]");
+            Log.i("log", "[ result.toString() ] " + result);
 
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray obj = jsonObject.getJSONArray("drinks");
 
-                Log.i("log", "onPostExecute() => ");
+                Log.i("log", "[ onPostExecute(String result) ] 2");
 
                 // Create a model for each object returned from the json results.
                 for(int i = 0; i < obj.length(); i++) {
-                    Log.i("log", "for loop => " + i);
+                    Log.i("log", "[ onPostExecute(String result) ] 3");
 
                     model.add(new DrinkModel(
                             obj.getJSONObject(i).getString("idDrink"),
