@@ -4,6 +4,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,12 +15,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
+import edu.sfsu.authentication.R;
 import edu.sfsu.authentication.databinding.FragmentHomeBinding;
 import edu.sfsu.authentication.model.home.DrinkModel;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private FragmentHomeBinding binding;
     int i = 0;
@@ -37,6 +43,15 @@ public class HomeFragment extends Fragment {
 
         View view = binding.getRoot(); // Renamed 'View root' to 'View view'.
 
+        /* *
+         * Spinner Implementation
+         */
+        Spinner spinner = (Spinner) view.findViewById(R.id.alphabet_spinner);
+        //spinner.setOnItemClickListener((AdapterView.OnItemClickListener) this);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.alphabet_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
         // update the UI
         final Observer<ArrayList<DrinkModel>> listObserver = new Observer<ArrayList<DrinkModel>>() {
             @Override
@@ -45,7 +60,6 @@ public class HomeFragment extends Fragment {
                 m.get(i).setStrDrink("Beer");
                 m.get(i).setStrDrinkAlternate("Lemon Aid");
                 m.get(i).setStrTags("Beer Tag");
-
                 /*
                 m.get(i).setStrVideo();
                 m.get(i).setStrCategory();
@@ -110,47 +124,53 @@ public class HomeFragment extends Fragment {
 
         return view;
 
-/*
-        // Create the observer which updates the UI.
-        final Observer<ArrayList<AlbumModel>> albumObserver = new Observer<ArrayList<AlbumModel>>() {
-            @Override
-            public void onChanged(ArrayList<AlbumModel> albumModels) {
-                albumModels.get(i).setStrAlbum("Life After College");
-                albumModels.get(i).setIntYearReleased("1992");
-                albumModels.get(i).setStrStyle("Logical Thinking");
-                albumModels.get(i).setStrGenre("Philosophy");
-                albumModels.get(i).setStrLabel("Own Label");
-            }
-        };
+/**
+    final Observer<ArrayList<AlbumModel>> albumObserver = new Observer<ArrayList<AlbumModel>>() {
+        @Override
+        public void onChanged(ArrayList<AlbumModel> albumModels) {
+            albumModels.get(i).setStrAlbum("Life After College");
+            albumModels.get(i).setIntYearReleased("1992");
+            albumModels.get(i).setStrStyle("Logical Thinking");
+            albumModels.get(i).setStrGenre("Philosophy");
+            albumModels.get(i).setStrLabel("Own Label");
+        }
+    };
 
-        recyclerViewAdapter.setListener(new RecyclerViewAdapter.Listener() {
-            @Override
-            public void itemClicked(int item) {
-                Log.i("log", "adapter.setListener -> " + item);
-                Intent intent = new Intent(getActivity(), AlbumDetailActivity.class);
-                intent.putExtra(AlbumDetailActivity.IMAGE_ID, item);
-                getActivity().startActivity(intent);
-            }
-        });
+    recyclerViewAdapter.setListener(new RecyclerViewAdapter.Listener() {
+        @Override
+        public void itemClicked(int item) {
+            Log.i("log", "adapter.setListener -> " + item);
+            Intent intent = new Intent(getActivity(), AlbumDetailActivity.class);
+            intent.putExtra(AlbumDetailActivity.IMAGE_ID, item);
+            getActivity().startActivity(intent);
+        }
+    });
 
-        homeViewModel.getLiveData().observe(getViewLifecycleOwner(), data -> {
-            binding.rvHomeFragment.setAdapter(recyclerViewAdapter);
-            binding.rvHomeFragment.setLayoutManager(new LinearLayoutManager(getContext()));
-        });
+    homeViewModel.getLiveData().observe(getViewLifecycleOwner(), data -> {
+        binding.rvHomeFragment.setAdapter(recyclerViewAdapter);
+        binding.rvHomeFragment.setLayoutManager(new LinearLayoutManager(getContext()));
+    });
 
-        // Observe the LiveData, passing in this activity as the LifeCycleOwner and the observer.
-        homeViewModel.getLiveData().observe(getViewLifecycleOwner(), albumObserver);
+    // Observe the LiveData, passing in this activity as the LifeCycleOwner and the observer.
+    homeViewModel.getLiveData().observe(getViewLifecycleOwner(), albumObserver);
 
-        return view;
-        */
-
-
-
+    return view;
+    */
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        Log.i("log"," adapterVIew.getItemAtPosition " + parent.getItemAtPosition(pos));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }
