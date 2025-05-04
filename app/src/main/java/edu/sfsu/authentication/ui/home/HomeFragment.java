@@ -1,4 +1,5 @@
 package edu.sfsu.authentication.ui.home;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -6,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -13,20 +15,18 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 import edu.sfsu.authentication.R;
+import edu.sfsu.authentication.SpinnerActivity;
 import edu.sfsu.authentication.databinding.FragmentHomeBinding;
 import edu.sfsu.authentication.model.home.DrinkModel;
 
-public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class HomeFragment extends Fragment implements View.OnClickListener {
+
 
     private FragmentHomeBinding binding;
-    int i = 0;
 
     /**
      * In most cases, an app compontent's onCreate(0 method is the right place to begin observing
@@ -35,25 +35,58 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
      * To ensure that the activity or fragment has data that it can display as soon as it becomes active.
      */
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // ViewModelProvider a utility class that provides ViewModels for a scope.
-        // HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class); // this uses HomeViewModel.java
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class); // this uses HomeViewModel.java
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
         View view = binding.getRoot(); // Renamed 'View root' to 'View view'.
 
-        /* *
-         * Spinner Implementation
-         */
+        // Button Begin
+        // Add button listener programmatically.
+        Button button = (Button) view.findViewById(R.id.button);
+        Spinner spinner = (Spinner) view.findViewById(R.id.alphabet_spinner);
+        TextView textView = (TextView) view.findViewById(R.id.text_home);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spinner.getSelectedItem();
+                String type = String.valueOf(spinner.getSelectedItem());
+                textView.setText(type);
+                Log.i("log", "[ Sandra ]");
+            }
+        });
+        // Button End
+
+        ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(
+                getContext(),
+                R.array.alphabet_array,
+                android.R.layout.simple_spinner_item
+        );
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+
+        /*
+        // Spinner
         Spinner spinner = (Spinner) view.findViewById(R.id.alphabet_spinner);
         //spinner.setOnItemClickListener((AdapterView.OnItemClickListener) this);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.alphabet_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+
+        ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(
+                getContext(),
+                R.array.alphabet_array,
+                android.R.layout.simple_spinner_item
+        );
+
+        // spinner.setOnItemClickListener((AdapterView.OnItemClickListener) this);
+        // spinner.setOnItemClickListener((AdapterView.OnItemClickListener) this);
+
+        // spinner.setOnItemClickListener((AdapterView.OnItemClickListener) this);
+        */
 
         // update the UI
         final Observer<ArrayList<DrinkModel>> listObserver = new Observer<ArrayList<DrinkModel>>() {
+            final int i = 0;
             @Override
             public void onChanged(ArrayList<DrinkModel> m) {
                 m.get(i).setIdDrink("100000");
@@ -104,7 +137,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 m.get(i).setStrMeasure14();
                 m.get(i).setStrMeasure15();
                 */
-
                 m.get(i).setStrImageSource("https://commons.wikimedia.org/wiki/File:Klassiche_Margarita.jpg");
                 m.get(i).setStrImageAttribution("Beer Thing");
                 m.get(i).setStrCreativeCommonsConfirmed("No");
@@ -123,54 +155,37 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         homeViewModel.getMutableLiveData().observe(getViewLifecycleOwner(), listObserver);
 
         return view;
+    }
 
-/**
-    final Observer<ArrayList<AlbumModel>> albumObserver = new Observer<ArrayList<AlbumModel>>() {
-        @Override
-        public void onChanged(ArrayList<AlbumModel> albumModels) {
-            albumModels.get(i).setStrAlbum("Life After College");
-            albumModels.get(i).setIntYearReleased("1992");
-            albumModels.get(i).setStrStyle("Logical Thinking");
-            albumModels.get(i).setStrGenre("Philosophy");
-            albumModels.get(i).setStrLabel("Own Label");
+    @Override
+    public void onClick(View view) {
+
+    }
+
+    static class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
+        void accessOuter(HomeFragment homeFragment) {
+            /*
+                Spinner spinner = (Spinner) findViewById(R.id.alphabet_spinner);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.alphabet_array, android.R.layout.simple_spinner_item);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adapter);
+            */
         }
-    };
 
-    recyclerViewAdapter.setListener(new RecyclerViewAdapter.Listener() {
         @Override
-        public void itemClicked(int item) {
-            Log.i("log", "adapter.setListener -> " + item);
-            Intent intent = new Intent(getActivity(), AlbumDetailActivity.class);
-            intent.putExtra(AlbumDetailActivity.IMAGE_ID, item);
-            getActivity().startActivity(intent);
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            Log.i("log", "");
         }
-    });
 
-    homeViewModel.getLiveData().observe(getViewLifecycleOwner(), data -> {
-        binding.rvHomeFragment.setAdapter(recyclerViewAdapter);
-        binding.rvHomeFragment.setLayoutManager(new LinearLayoutManager(getContext()));
-    });
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
 
-    // Observe the LiveData, passing in this activity as the LifeCycleOwner and the observer.
-    homeViewModel.getLiveData().observe(getViewLifecycleOwner(), albumObserver);
-
-    return view;
-    */
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        Log.i("log"," adapterVIew.getItemAtPosition " + parent.getItemAtPosition(pos));
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 }

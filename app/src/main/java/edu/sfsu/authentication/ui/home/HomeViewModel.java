@@ -22,6 +22,7 @@ import okhttp3.Response;
 
 public class HomeViewModel extends ViewModel {
 
+    // MutableLiveData<ArrayList<DrinkModel>> is also used in HomeFragment.
     static MutableLiveData<ArrayList<DrinkModel>> getMutableLiveData() {
         return new MutableLiveData<>();
     }
@@ -58,6 +59,8 @@ public class HomeViewModel extends ViewModel {
 
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+
+            Log.i("log", "[ onPostExecute ] " + result);
 
             try {
                 JSONObject jsonObject = new JSONObject(result);
