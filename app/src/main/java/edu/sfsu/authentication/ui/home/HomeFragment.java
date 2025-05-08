@@ -39,11 +39,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         View view = binding.getRoot(); // Renamed 'View root' to 'View view'.
 
-        Button button = (Button) view.findViewById(R.id.button);
         ImageView imageView = (ImageView) view.findViewById(R.id.image_holder);
-        Spinner spinner = (Spinner) view.findViewById(R.id.alphabet_spinner);
         TextView textView = (TextView) view.findViewById(R.id.text_home);
 
+        Spinner spinner = (Spinner) view.findViewById(R.id.alphabet_spinner);
         ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(
                 getContext(),
                 R.array.alphabet_array,
@@ -53,6 +52,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
+        Button button = (Button) view.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,9 +63,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         final Observer<ArrayList<DrinkModel>> homeObserver = new Observer<ArrayList<DrinkModel>>() {
             @Override
-            public void onChanged(ArrayList<DrinkModel> m) {
-                textView.setText(m.get(3).getStrDrink());
-                Picasso.get().load(Uri.parse(m.get(0).getStrDrinkThumb())).resize(200, 150).into(imageView);
+            public void onChanged(ArrayList<DrinkModel> model) {
+                textView.setText(model.get(3).getStrDrinkThumb());
+                // Picasso.get().load(m.get(0).getStrDrinkThumb()).into(imageView);
                 // Picasso.get().load(Uri.parse(m.getURLToImage())).resize(200, 150).centerCrop().transform(new RoundedTransformation(10, 0)).into(holder.urlToImage);
             }
         };
