@@ -1,9 +1,9 @@
 package edu.sfsu.authentication.async;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,14 +18,23 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class HomeViewAsyncTask {
+public class HomeViewAsyncTask extends ViewModel {
+
+    private static ArrayList<DrinkModel> model = null;
+    private static MutableLiveData<ArrayList<DrinkModel>> liveData = null;
+
+    public static MutableLiveData<ArrayList<DrinkModel>> getLiveData() {
+        return liveData;
+    }
+
+    HomeViewAsyncTask() {
+        model = DrinkViewModel.getModel();
+        liveData = new MutableLiveData<>();
+        new LatestTradesAsyncTask().execute("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=a"); // async call
+    }
 
     public static class LatestTradesAsyncTask extends AsyncTask<String, String, String> {
 
-        private final MutableLiveData<ArrayList<DrinkModel>> liveData = new MutableLiveData<>();
-        private final ArrayList<DrinkModel> model = DrinkViewModel.getModel();
-
-        @Override
         protected String doInBackground(String... param) {
             OkHttpClient client = new OkHttpClient(); // Using OkHttp library for threads
             Request request = new Request.Builder().url(param[0]).build(); // pass the url in as an array index
@@ -47,14 +56,11 @@ public class HomeViewAsyncTask {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            Log.i("log", "[ onPostExecute ] " + result);
-
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray obj = jsonObject.getJSONArray("drinks");
 
                 for(int i = 0; i < obj.length(); i++) {
-
                     model.add(new DrinkModel(
                             obj.getJSONObject(i).getString("idDrink"),
                             obj.getJSONObject(i).getString("strDrink"),
@@ -108,10 +114,10 @@ public class HomeViewAsyncTask {
                             obj.getJSONObject(i).getString("strCreativeCommonsConfirmed"),
                             obj.getJSONObject(i).getString("dateModified")));
                 }
+                liveData.setValue(model);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            liveData.setValue(model);
         }
     }
 }
