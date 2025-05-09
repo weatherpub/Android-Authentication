@@ -7,7 +7,7 @@ import edu.sfsu.authentication.model.home.DrinkModel;
 public class DrinkViewModel {
     private static final DrinkViewModel drinksViewModel = new DrinkViewModel();
 
-    private final ArrayList<DrinkModel> model;
+    private static ArrayList<DrinkModel> model;
 
     public static DrinkViewModel getInstance() {
         return drinksViewModel;
@@ -17,7 +17,7 @@ public class DrinkViewModel {
         model = new ArrayList<>();
     }
 
-    public ArrayList<DrinkModel> getModel() {
+    public static ArrayList<DrinkModel> getModel() {
         return model;
     }
 }

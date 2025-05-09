@@ -1,6 +1,7 @@
 package edu.sfsu.authentication.ui.home;
 import android.app.Activity;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,12 +21,21 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import edu.sfsu.authentication.R;
 import edu.sfsu.authentication.async.HomeViewAsyncTask;
 import edu.sfsu.authentication.databinding.FragmentHomeBinding;
+import edu.sfsu.authentication.model.home.AsyncModel;
 import edu.sfsu.authentication.model.home.DrinkModel;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -33,13 +43,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        HomeViewAsyncTask homeViewModel = new ViewModelProvider(this).get(HomeViewAsyncTask.class); // this uses HomeViewModel.java
+        new ViewModelProvider(this).get(HomeViewAsyncTask.class); // this uses HomeViewModel.java
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
         View view = binding.getRoot(); // Renamed 'View root' to 'View view'.
 
-        ImageView imageView = (ImageView) view.findViewById(R.id.image_holder);
+        ImageView img_holder = (ImageView) view.findViewById(R.id.image_holder);
         TextView textView = (TextView) view.findViewById(R.id.text_home);
 
         Spinner spinner = (Spinner) view.findViewById(R.id.alphabet_spinner);
@@ -57,16 +67,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 String type = String.valueOf(spinner.getSelectedItem());
-                new HomeViewAsyncTask.LatestTradesAsyncTask().execute("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + type); // async call
             }
         });
 
         final Observer<ArrayList<DrinkModel>> homeObserver = new Observer<ArrayList<DrinkModel>>() {
+            final int i = 4;
             @Override
             public void onChanged(ArrayList<DrinkModel> model) {
-                textView.setText(model.get(3).getStrDrinkThumb());
-                // Picasso.get().load(m.get(0).getStrDrinkThumb()).into(imageView);
-                // Picasso.get().load(Uri.parse(m.getURLToImage())).resize(200, 150).centerCrop().transform(new RoundedTransformation(10, 0)).into(holder.urlToImage);
+                textView.setText(model.get(i).getStrDrink());
+                Picasso.get().load(model.get(i).getStrDrinkThumb()).into(img_holder);
             }
         };
 
