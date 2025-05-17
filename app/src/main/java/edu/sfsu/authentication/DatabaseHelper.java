@@ -17,8 +17,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // we can access the string outside the class as well because it's declared as 'public'.
     public static final String TABLE_ROW_ID = "_id";
-    public static final String TABLE_ROW_MAKE = "make";
-    public static final String TABLE_ROW_DESCRIPTION = "description";
+    public static final String TABLE_ROW_MAKE = "MAKE";
+    public static final String TABLE_ROW_DESCRIPTION = "DESCRIPTION";
 
     /**
      * Public Constructor
@@ -31,10 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // create a new motorcycle table for downgrade db
     private static void create_new_table(SQLiteDatabase db) {
         Log.i("log", "create_table(SQLiteDatabase db)");
-        db.execSQL("CREATE TABLE Motorcycle(TABLE_ROW_ID integer PRIMARY KEY AUTOINCREMENT, "
-                + TABLE_ROW_MAKE + "text, "
-                + TABLE_ROW_DESCRIPTION + "description text, "
-                + "image_resource_id integer);");
+        db.execSQL("CREATE TABLE Motorcycle(_id INTEGER PRIMARY KEY AUTOINCREMENT, MAKE text, DESCRIPTION text, ID integer);");
         // change to motorcycle models and change the descriptions
         insert_item(db, "Harley Davidson", "Chevrolet is an American automotive company.", R.drawable.camaro);
         insert_item(db, "Kawasaki", "Chrysler is an American Automotive Company", R.drawable.chevelle);
@@ -44,10 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Default Method
     private static void create_table(SQLiteDatabase db) {
         Log.i("log", "create_table(SQLiteDatabase db)");
-        db.execSQL("CREATE TABLE Car(_id integer PRIMARY KEY AUTOINCREMENT, "
-                + "make text, "
-                + "description text, "
-                + "image_resource_id integer);");
+        db.execSQL("CREATE TABLE Car(_id INTEGER PRIMARY KEY AUTOINCREMENT, MAKE text, DESCRIPTION text, ID integer);");
         insert_item(db, "Chevrolet", "Chevrolet is an American automotive company.", R.drawable.camaro);
         insert_item(db, "Chrysler", "Chrysler is an American Automotive Company", R.drawable.chevelle);
         insert_item(db, "Ford", "Ford is an American Automotive Company.", R.drawable.mustang);
@@ -66,10 +60,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues ItemValues = new ContentValues();
 
-        ItemValues.put("make", make);
-        ItemValues.put("description", description);
+        ItemValues.put("MAKE", make);
+        ItemValues.put("DESCRIPTION", description);
         ItemValues.put("image_resource_id", resourceId);
-        db.insert("car", null, ItemValues);
+        db.insert("Car", null, ItemValues);
     }
 
     // This should update the table, if I update the DB_VERSION to 2
