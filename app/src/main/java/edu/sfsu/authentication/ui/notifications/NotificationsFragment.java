@@ -26,6 +26,10 @@ public class NotificationsFragment extends Fragment {
     private FragmentNotificationsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        NotificationsViewModel notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+
+        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         // Get a reference to the database.
         SQLiteOpenHelper databaseHelper = new DatabaseHelper(getContext());
@@ -33,21 +37,17 @@ public class NotificationsFragment extends Fragment {
             SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
             // Create a Cursor and get a reference to it. Return all records from a table.
-            Cursor cursor = db.query("Car", new String[] {"_id", "make", "description"}, null, null, null, null, null);
+            Cursor cursor = db.query("Car", new String[] {"MAKE", "DESCRIPTION"}, null, null, null, null, null);
 
             if(cursor.moveToFirst()) {
                 String make_txt = cursor.getString(0);
                 String description_txt = cursor.getString(1);
-                String id_txt = cursor.getString(2);
 
-                TextView make = (TextView)getActivity().findViewById(R.id.tv_make);
+                TextView make = (TextView)view.findViewById(R.id.tv_make);
                 make.setText(make_txt);
 
-                TextView description = (TextView)getActivity().findViewById(R.id.tv_description);
-                description.setText(description_txt);
-
-                TextView id = (TextView)getActivity().findViewById(R.id.tv_record);
-                id.setText(id_txt);
+                TextView desc = (TextView)view.findViewById(R.id.tv_description);
+                desc.setText(description_txt);
             }
             cursor.close();
             db.close();
@@ -55,11 +55,6 @@ public class NotificationsFragment extends Fragment {
             Toast toast = Toast.makeText(getContext(), "Database Unavailable", Toast.LENGTH_SHORT);
             toast.show();
         }
-
-        NotificationsViewModel notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
-
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
 
         /* *
         * Final TextView textView = binding.textNotifications;
