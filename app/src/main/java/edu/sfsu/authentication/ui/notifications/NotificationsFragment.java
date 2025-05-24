@@ -49,23 +49,21 @@ public class NotificationsFragment extends Fragment {
             Cursor cursor = db.query(
                     false,
                     "Car",
-                    new String[] { "ID", "COLOR", "MAKE", "MODEL", "PRICE", "DESCRIPTION", "RESOURCE" },
-                    "COLOR = ?", new String[] {"COLOR"},
-                    null, null, null, null, null);
+                    new String[] { "COLOR", "MAKE", "MODEL", "PRICE", "DESCRIPTION"},
+                    "COLOR = ?",
+                    new String[] {"Green"}, null, null, null, null, null);
 
             Log.i("log", "NotificationFragment 2");
 
             if(cursor.moveToFirst()) {
                 Log.i("log", "NotificationFragment 3");
-                int record_txt = cursor.getInt(0);
-                String color_txt = cursor.getString(1);
-                String make_txt = cursor.getString(2);
-                String model_txt = cursor.getString(3);
+                //int record_txt = cursor.getInt(0);
+                String color_txt = cursor.getString(0);
+                String make_txt = cursor.getString(1);
+                String model_txt = cursor.getString(2);
+                String price = cursor.getString(3);
                 String description_txt = cursor.getString(4);
-                int resource_txt = cursor.getInt(5);
-
-                TextView record = (TextView) view.findViewById(R.id.tv_id);
-                record.setText(record_txt);
+                //int resource_txt = cursor.getInt(5);
 
                 TextView color = (TextView) view.findViewById(R.id.tv_color);
                 color.setText(color_txt);
@@ -79,8 +77,8 @@ public class NotificationsFragment extends Fragment {
                 TextView desc = (TextView) view.findViewById(R.id.tv_description);
                 desc.setText(description_txt);
 
-                ImageView resource = (ImageView) view.findViewById(R.id.iv_resource);
-                resource.setImageResource(resource_txt);
+                // ImageView resource = (ImageView) view.findViewById(R.id.iv_resource);
+                // resource.setImageResource(resource_txt);
             }
             cursor.close();
             db.close();
