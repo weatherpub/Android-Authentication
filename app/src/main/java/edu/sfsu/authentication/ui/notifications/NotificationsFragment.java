@@ -51,34 +51,37 @@ public class NotificationsFragment extends Fragment {
                     "Car",
                     new String[] { "COLOR", "MAKE", "MODEL", "PRICE", "DESCRIPTION"},
                     "COLOR = ?",
-                    new String[] {"Green"}, null, null, null, null, null);
+                    new String[] {"Red"}, null, null, null, null, null);
 
             Log.i("log", "NotificationFragment 2");
+
+            TextView color = (TextView) view.findViewById(R.id.tv_color);
+            TextView make = (TextView) view.findViewById(R.id.tv_make);
+            TextView model = (TextView) view.findViewById(R.id.tv_model);
+            TextView price = (TextView) view.findViewById(R.id.tv_price);
+            TextView desc = (TextView) view.findViewById(R.id.tv_description);
 
             if(cursor.moveToFirst()) {
                 Log.i("log", "NotificationFragment 3");
                 //int record_txt = cursor.getInt(0);
-                String color_txt = cursor.getString(0);
-                String make_txt = cursor.getString(1);
-                String model_txt = cursor.getString(2);
-                String price = cursor.getString(3);
-                String description_txt = cursor.getString(4);
-                //int resource_txt = cursor.getInt(5);
+                String color_str = cursor.getString(0);
+                String make_str = cursor.getString(1);
+                String model_str = cursor.getString(2);
+                String price_str = cursor.getString(3);
+                String description_str = cursor.getString(4);
+                // int resource_txt = cursor.getInt(5);
 
-                TextView color = (TextView) view.findViewById(R.id.tv_color);
-                color.setText(color_txt);
+                color.setText(color_str);
+                make.setText(make_str);
+                model.setText(model_str);
+                price.setText(price_str);
+                desc.setText(description_str);
 
-                TextView make = (TextView) view.findViewById(R.id.tv_make);
-                make.setText(make_txt);
-
-                TextView model = (TextView) view.findViewById(R.id.tv_model);
-                model.setText(model_txt);
-
-                TextView desc = (TextView) view.findViewById(R.id.tv_description);
-                desc.setText(description_txt);
-
-                // ImageView resource = (ImageView) view.findViewById(R.id.iv_resource);
-                // resource.setImageResource(resource_txt);
+                // use picasso to output the image
+                /*
+                ImageView resource = (ImageView) view.findViewById(R.id.iv_resource);
+                resource.setImageResource(resource_txt);
+                */
             }
             cursor.close();
             db.close();
