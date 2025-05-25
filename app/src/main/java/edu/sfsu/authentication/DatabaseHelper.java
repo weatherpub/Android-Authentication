@@ -33,12 +33,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, NEW_VERSION); // options
+        Log.i("log", "DatabaseHelper 1");
+    }
+
+    /**
+     * onCreate() method gets called when the database first gets created on the device.
+     * @param db
+     */
+    @Override
+    public void onCreate(SQLiteDatabase db) { // mandatory
+        Log.i("log", "DatabaseHelper 2");
+        update_database(db, EXISTING_VERSION, NEW_VERSION);
     }
 
     /**
      * insert_record - insert an record into the table.
      * @param db
-     * @param id
      * @param make
      * @param model
      * @param color
@@ -62,9 +72,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         value.put("MODEL", model);
         value.put("PRICE", price);
         value.put("DESCRIPTION", description);
-        value.put("IMAGE", resource);
+        value.put("RESOURCE", resource);
 
         db.insert("Car", null, value);
+
+        Log.i("log", "[ insert_record(...) - value object has been inserted correctly. ]");
     }
 
     /**
@@ -86,9 +98,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "PRICE text,"
                 + "DESCRIPTION text,"
                 + "RESOURCE integer);");
-        insert_record(db, 0, "Green", "Chevrolet", "Camaro", "2,999.00", "Camaro is made in Detroit.", R.drawable.camaro);
-        insert_record(db, 1, "Red", "Ford", "Mustang", "12,999.00", "Ford is an American auto company.", R.drawable.mustang);
-        insert_record(db, 2, "Blue", "Chevrolet", "Chevelle", "22,999.00", "Chevelle is an icon.", R.drawable.chevelle);
+        insert_record(db, 0, "Green", "Chevrolet", "Camaro", "$17,999", "Camaro is made in Detroit.", R.drawable.camaro);
+        insert_record(db, 1, "Red", "Ford", "Pinto", "$3,999", "Ford is an American auto company.", R.drawable.mustang);
+        insert_record(db, 2, "Blue", "Chevrolet", "Chevelle", "$42,999", "Chevelle is an icon.", R.drawable.chevelle);
     }
 
     /**
@@ -96,7 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param db
      */
     private static void create_table(SQLiteDatabase db) {
-        Log.i("log", "Create Table version 0");
+        Log.i("log", "Create Table");
         db.execSQL("CREATE TABLE Car("
                 + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "COLOR TEXT,"
@@ -105,9 +117,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "PRICE TEXT,"
                 + "DESCRIPTION TEXT,"
                 + "RESOURCE INTEGER);");
-        insert_record(db, 0, "Green", "Chevrolet", "Camaro", "2,999.00", "Camaro is made in Detroit.", R.drawable.camaro);
-        insert_record(db, 1, "Red", "Ford", "Mustang", "12,999.00", "Ford is an American auto company.", R.drawable.mustang);
-        insert_record(db, 2, "Blue", "Chevrolet", "Chevelle", "22,999.00", "Chevelle is an icon.", R.drawable.chevelle);
+        insert_record(db,0, "Green", "Chevrolet", "Monte Carlo", "5,999", "The Monte-Carlo is a classic.", R.drawable.camaro);
+        insert_record(db,1, "Red", "Ford", "Mustang", "15,999", "Ford is an American auto company.", R.drawable.mustang);
+        insert_record(db,2, "Blue", "Chevrolet", "Chevelle", "22,999", "Chevelle is an icon and pure muscle.", R.drawable.chevelle);
     }
 
     // DELETE a record in the car table.
@@ -130,13 +142,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     private void update_database(SQLiteDatabase db, int existing_version, int new_version) {
         // Create a default table (version 0).
-        if(existing_version == 0) {
-            Log.i("log", "update_database - Create Table");
+        if(existing_version < new_version) {
             create_table(db);
+            Log.i("log", "update_database - Create Table");
         }
 
         // This code will run if the user already has version 1 of the database.
-        if (existing_version == 1){
+        if (existing_version == new_version){
             Log.i("log", "Upgrade Table");
             update_table(db);
         }
@@ -185,13 +197,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    /**
-     * onCreate() method gets called when the database first gets created on the device.
-     * @param sqLiteDatabase
-     */
+    /*
     @Override
     public void onCreate(SQLiteDatabase db) { // mandatory
         Log.i("log", "Opening Database: " + getDatabaseName());
         update_database(db, EXISTING_VERSION, NEW_VERSION);
     }
+     */
 }
