@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.sfsu.authentication.DatabaseHelper;
 import edu.sfsu.authentication.R;
 import edu.sfsu.authentication.databinding.FragmentNotificationsBinding;
+import kotlinx.serialization.StringFormat;
 
 public class NotificationsFragment extends Fragment {
 
@@ -37,51 +38,63 @@ public class NotificationsFragment extends Fragment {
         SQLiteOpenHelper openHelper = new DatabaseHelper(getActivity());
 
         try {
-            Log.i("log", "NotificationFragment 0");
-
             SQLiteDatabase db = openHelper.getReadableDatabase();
 
-            // Create a Cursor and get a reference to it. Return all records from a table.
-            // String[] COLUMNS = { "ID", "COLOR", "MAKE", "MODEL", "PRICE", "DESCRIPTION", "RESOURCE" };
+            /**
+             * Return All Records from a table.
+             * (Page 664 Head First Android Development)
+             */
 
-            Log.i("log", "NotificationFragment 1");
-
+            /**
             Cursor cursor = db.query(
                     false,
                     "Car",
-                    new String[] { "COLOR", "MAKE", "MODEL", "PRICE", "DESCRIPTION"},
+                    new String[] { "COLOR", "MAKE", "MODEL", "PRICE", "DESCRIPTION", "RESOURCE"},
                     "COLOR = ?",
-                    new String[] {"Red"}, null, null, null, null, null);
+                    new String[] {"Blue"}, null, null, null, null, null);
+             */
+
+            // all values
+             Cursor cursor = db.query(
+                     "Car",
+                     new String[] { "ID", "COLOR", "MAKE", "MODEL", "PRICE", "DESCRIPTION", "RESOURCE"},
+                     null, null, null, null, null);
+            /*
+            Cursor cursor = db.query(
+                    false,
+                    "Car",
+                    new String[] { "COLOR", "MAKE", "MODEL", "PRICE", "DESCRIPTION", "RESOURCE"},
+                    "RESOURCE = ?",
+                    new String[] {Integer.toString(R.drawable.mustang)},
+                    null, null, null, null, null);
+            */
 
             Log.i("log", "NotificationFragment 2");
 
+            TextView id = (TextView) view.findViewById(R.id.tv_id);
             TextView color = (TextView) view.findViewById(R.id.tv_color);
             TextView make = (TextView) view.findViewById(R.id.tv_make);
             TextView model = (TextView) view.findViewById(R.id.tv_model);
             TextView price = (TextView) view.findViewById(R.id.tv_price);
+            ImageView resource = (ImageView) view.findViewById(R.id.iv_resource);
             TextView desc = (TextView) view.findViewById(R.id.tv_description);
 
             if(cursor.moveToFirst()) {
-                Log.i("log", "NotificationFragment 3");
-                //int record_txt = cursor.getInt(0);
-                String color_str = cursor.getString(0);
-                String make_str = cursor.getString(1);
-                String model_str = cursor.getString(2);
-                String price_str = cursor.getString(3);
-                String description_str = cursor.getString(4);
-                // int resource_txt = cursor.getInt(5);
+                int record_str = cursor.getInt(0);
+                String color_str = cursor.getString(1);
+                String make_str = cursor.getString(2);
+                String model_str = cursor.getString(3);
+                String price_str = cursor.getString(4);
+                String description_str = cursor.getString(5);
+                int resource_str = cursor.getInt(6);
 
+                id.setText(Integer.toString(record_str));
                 color.setText(color_str);
                 make.setText(make_str);
                 model.setText(model_str);
                 price.setText(price_str);
                 desc.setText(description_str);
-
-                // use picasso to output the image
-                /*
-                ImageView resource = (ImageView) view.findViewById(R.id.iv_resource);
-                resource.setImageResource(resource_txt);
-                */
+                resource.setImageResource(resource_str);
             }
             cursor.close();
             db.close();
