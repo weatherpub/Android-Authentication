@@ -5,14 +5,15 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,7 +22,6 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.sfsu.authentication.DatabaseHelper;
 import edu.sfsu.authentication.R;
 import edu.sfsu.authentication.databinding.FragmentNotificationsBinding;
-import kotlinx.serialization.StringFormat;
 
 public class NotificationsFragment extends Fragment {
 
@@ -29,57 +29,71 @@ public class NotificationsFragment extends Fragment {
 
     @SuppressLint("Range")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        // execute the nested class.
+        new DatabaseAsyncTask().execute();
+
         NotificationsViewModel notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
 
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        // Get a reference to the database.
+        return view ;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    public class DatabaseAsyncTask extends AsyncTask<String, ProgressBar, Boolean> {
+
+        SQLiteDatabase db;
+        Cursor cursor;
+
         SQLiteOpenHelper openHelper = new DatabaseHelper(getActivity());
 
-        try {
-            SQLiteDatabase db = openHelper.getReadableDatabase();
+        protected void onPreExecute() {}
 
-            /**
-             * Return All Records from a table.
-             * (Page 664 Head First Android Development)
-             */
+        protected Boolean doInBackground(String... params) {
+            Log.i("log", "Do in the Background");
+            for(int i = 0; i < 10; i++) {
+                publishProgress(i);
+            }
 
-            /**
-            Cursor cursor = db.query(
-                    false,
-                    "Car",
-                    new String[] { "COLOR", "MAKE", "MODEL", "PRICE", "DESCRIPTION", "RESOURCE"},
-                    "COLOR = ?",
-                    new String[] {"Blue"}, null, null, null, null, null);
-             */
+            try {
+                db = openHelper.getReadableDatabase();
+                cursor = db.query(
+                        "Car",
+                        new String[] { "ID", "COLOR", "MAKE", "MODEL", "PRICE", "DESCRIPTION", "RESOURCE"},
+                        null, null, null, null, null);
 
-            // all values
-             Cursor cursor = db.query(
-                     "Car",
-                     new String[] { "ID", "COLOR", "MAKE", "MODEL", "PRICE", "DESCRIPTION", "RESOURCE"},
-                     null, null, null, null, null);
-            /*
-            Cursor cursor = db.query(
-                    false,
-                    "Car",
-                    new String[] { "COLOR", "MAKE", "MODEL", "PRICE", "DESCRIPTION", "RESOURCE"},
-                    "RESOURCE = ?",
-                    new String[] {Integer.toString(R.drawable.mustang)},
-                    null, null, null, null, null);
-            */
+                return true;
+            } catch (SQLException e)  {
+                return false;
+            }
+        }
 
-            Log.i("log", "NotificationFragment 2");
+        private void publishProgress(int i) {
+        }
 
-            TextView id = (TextView) view.findViewById(R.id.tv_id);
-            TextView color = (TextView) view.findViewById(R.id.tv_color);
-            TextView make = (TextView) view.findViewById(R.id.tv_make);
-            TextView model = (TextView) view.findViewById(R.id.tv_model);
-            TextView price = (TextView) view.findViewById(R.id.tv_price);
-            ImageView resource = (ImageView) view.findViewById(R.id.iv_resource);
-            TextView desc = (TextView) view.findViewById(R.id.tv_description);
+        protected void onProgressUpdate(Integer... values) {
+            // onProgressUpdate(values[0]);
+        }
 
-            if(cursor.moveToFirst()) {
+        protected void onPostExecute(Boolean success) {
+            super.onPostExecute(success);
+
+            TextView id = (TextView) getView().findViewById(R.id.tv_id);
+            TextView color = (TextView) getView().findViewById(R.id.tv_color);
+            TextView make = (TextView) getView().findViewById(R.id.tv_make);
+            TextView model = (TextView) getView().findViewById(R.id.tv_model);
+            TextView price = (TextView) getView().findViewById(R.id.tv_price);
+            ImageView resource = (ImageView) getView().findViewById(R.id.iv_resource);
+            TextView desc = (TextView) getView().findViewById(R.id.tv_description);
+
+            if(cursor.moveToLast()) {
                 int record_str = cursor.getInt(0);
                 String color_str = cursor.getString(1);
                 String make_str = cursor.getString(2);
@@ -98,17 +112,6 @@ public class NotificationsFragment extends Fragment {
             }
             cursor.close();
             db.close();
-        } catch (SQLException e)  {
-            Toast toast = Toast.makeText(getContext(), "Database Unavailable", Toast.LENGTH_SHORT);
-            toast.show();
         }
-
-        return view ;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 }
