@@ -10,29 +10,13 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
     // DATABASE => UPPERCASE, Table => Capitalized
 
-    // using constant fields
-    /**
-     * The app will start the database version at 1.
-     * Meaning the first time a user downloads the app,
-     * they will be using version 1 of the database.
-     * If we need to modify the database for any reason,
-     * we can just increment NEW_VERSION by 1, this will
-     * update the database to the next version, in this case
-     * version 2.
-     * When updating an "EXISTING DATABASE", NEW_VERSION and EXISTING_VERSION
-     * will both need to increment by one. They should toggle.
-     */
-    private static final String DB_NAME = "AUTOMOTIVE";
-    private static final int NEW_VERSION = 1; // version options 2 - 3
-    private static final int EXISTING_VERSION = 0; // version options 1 - 2
-
     /**
      * Public Constructor
      * SQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version)
      * @param context
      */
     public DatabaseHelper(Context context) {
-        super(context, DB_NAME, null, NEW_VERSION); // options
+        super(context, DatabaseContract.DB_NAME, null, DatabaseContract.NEW_VERSION); // options
         Log.i("log", "DatabaseHelper 1");
     }
 
@@ -43,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) { // mandatory
         Log.i("log", "DatabaseHelper 2");
-        update_database(db, EXISTING_VERSION, NEW_VERSION);
+        update_database(db, DatabaseContract.EXISTING_VERSION, DatabaseContract.NEW_VERSION);
     }
 
     /**
@@ -66,13 +50,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues value = new ContentValues();
 
-        value.put("ID", id);
-        value.put("COLOR", color);
-        value.put("MAKE", make);
-        value.put("MODEL", model);
-        value.put("PRICE", price);
-        value.put("DESCRIPTION", description);
-        value.put("RESOURCE", resource);
+        // Implement the contract defined in the nested class.
+        // Page 300 -  Professional Android 4th Edition
+        value.put(DatabaseContract.KEY_ID, id);
+        value.put(DatabaseContract.COLOR_COL, color);
+        value.put(DatabaseContract.MAKE_COL, make);
+        value.put(DatabaseContract.MODEL_COL, model);
+        value.put(DatabaseContract.PRICE_COL, price);
+        value.put(DatabaseContract.DESCRIPTION_COL, description);
+        value.put(DatabaseContract.RESOURCE_COL, resource);
 
         db.insert("Car", null, value);
 
@@ -89,17 +75,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param db
      */
     private static void update_table(SQLiteDatabase db) {
-        Log.i("log", "create_automobile_table(SQLiteDatabase db)");
+        Log.i("log", "Update Table");
         db.execSQL("CREATE TABLE Car("
-                + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "COLOR text,"
-                + "MAKE text,"
-                + "MODEL text,"
-                + "PRICE text,"
-                + "DESCRIPTION text,"
-                + "RESOURCE integer);");
-        insert_record(db, 0, "Green", "Chevrolet", "Camaro", "$17,999", "Camaro is made in Detroit.", R.drawable.camaro);
-        insert_record(db, 1, "Red", "Ford", "Pinto", "$3,999", "Ford is an American auto company.", R.drawable.mustang);
+                + DatabaseContract.KEY_ID + "INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + DatabaseContract.COLOR_COL + "text,"
+                + DatabaseContract.MAKE_COL + "text,"
+                + DatabaseContract.MODEL_COL + "text,"
+                + DatabaseContract.PRICE_COL + "text,"
+                + DatabaseContract.DESCRIPTION_COL + "text,"
+                + DatabaseContract.RESOURCE_COL + "integer);");
+        insert_record(db, 0, "Red", "Ford", "Pinto", "$3,999", "Ford is an American auto company.", R.drawable.mustang);
+        insert_record(db, 1, "Green", "Chevrolet", "Camaro", "$17,999", "Camaro is made in Detroit.", R.drawable.camaro);
         insert_record(db, 2, "Blue", "Chevrolet", "Chevelle", "$42,999", "Chevelle is an icon.", R.drawable.chevelle);
     }
 
@@ -110,13 +96,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static void create_table(SQLiteDatabase db) {
         Log.i("log", "Create Table");
         db.execSQL("CREATE TABLE Car("
-                + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "COLOR TEXT,"
-                + "MAKE TEXT,"
-                + "MODEL TEXT,"
-                + "PRICE TEXT,"
-                + "DESCRIPTION TEXT,"
-                + "RESOURCE INTEGER);");
+                + DatabaseContract.KEY_ID + "INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + DatabaseContract.COLOR_COL + "text,"
+                + DatabaseContract.MAKE_COL + "text,"
+                + DatabaseContract.MODEL_COL + "text,"
+                + DatabaseContract.PRICE_COL + "text,"
+                + DatabaseContract.DESCRIPTION_COL + "text,"
+                + DatabaseContract.RESOURCE_COL + "integer);");
         insert_record(db,0, "Green", "Chevrolet", "Monte Carlo", "5,999", "The Monte-Carlo is a classic.", R.drawable.camaro);
         insert_record(db,1, "Red", "Ford", "Mustang", "15,999", "Ford is an American auto company.", R.drawable.mustang);
         insert_record(db,2, "Blue", "Chevrolet", "Chevelle", "22,999", "Chevelle is an icon and pure muscle.", R.drawable.chevelle);
@@ -148,24 +134,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         // This code will run if the user already has version 1 of the database.
-        if (existing_version == new_version){
+        if (new_version == 1){
             Log.i("log", "Upgrade Table");
             update_table(db);
         }
-        /*
-        switch (user_version) {
-            case 1: create_car_table(db);
-                break;
-            case 2: update_record(db);
-                break;
-            case 3: delete_record(db);
-                break;
-            case 4: db.execSQL("ALTER TABLE car ADD COLUMN make TEXT");
-                break;
-            default:
-                Log.i("log", "user_version default selection");
-        }
-         */
     }
 
     /**
@@ -197,11 +169,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    /*
-    @Override
-    public void onCreate(SQLiteDatabase db) { // mandatory
-        Log.i("log", "Opening Database: " + getDatabaseName());
-        update_database(db, EXISTING_VERSION, NEW_VERSION);
-    }
+    /**
+     * The app will start the database version at 1.
+     * Meaning the first time a user downloads the app, they will be using version 1 of the database.
+     * If we need to modify the database for any reason, we can just increment NEW_VERSION by 1,
+     * this will update the database to the next version, in this case version 2.
+     * When updating an "EXISTING DATABASE", NEW_VERSION and EXISTING_VERSION
+     * will both need to increment by one. They should toggle.
      */
+
+    public static class DatabaseContract {
+        public static final String DB_NAME = "AUTOMOTIVE";
+        public static final int NEW_VERSION = 1; // version options 2 - 3
+        public static final int EXISTING_VERSION = 0; // version options 1 - 2
+        public static final String KEY_ID = "ID";
+        public static final String COLOR_COL = "COLOR";
+        public static final String MAKE_COL = "MAKE";
+        public static final String MODEL_COL = "MODEL";
+        public static final String PRICE_COL = "PRICE";
+        public static final String DESCRIPTION_COL = "DESCRIPTION";
+        public static final String RESOURCE_COL = "RESOURCE";
+    }
 }
