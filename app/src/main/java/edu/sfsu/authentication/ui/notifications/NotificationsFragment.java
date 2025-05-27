@@ -18,25 +18,46 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 import edu.sfsu.authentication.DatabaseHelper;
 import edu.sfsu.authentication.R;
+import edu.sfsu.authentication.adapter.RecyclerViewAdapter;
 import edu.sfsu.authentication.databinding.FragmentNotificationsBinding;
+import edu.sfsu.authentication.model.home.DatabaseModel;
 
 public class NotificationsFragment extends Fragment {
 
+    public int record_str;
+    public String color_str;
+    public String make_str;
+    public String model_str;
+    public String price_str;
+    public String description_str;
+    public int resource_str;
+
     private FragmentNotificationsBinding binding;
+    public RecyclerView recyclerView;
 
     @SuppressLint("Range")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        // execute the nested class.
-        new DatabaseAsyncTask().execute();
+        // RecyclerView Implementation
+        // RecyclerView recyclerView = (RecyclerView)getLayoutInflater().inflate(R.layout.card, container, false);
+        // DatabaseRecyclerViewAdapter databaseRecyclerViewAdapter = new DatabaseRecyclerViewAdapter();
 
         NotificationsViewModel notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
 
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        // View view = binding.getRoot();
+        View view = inflater.inflate(R.layout.fragment_notifications, container, false);
+        recyclerView = view.findViewById(R.id.rv_homeFragment);
+
+        // execute the nested class.
+        new DatabaseAsyncTask().execute();
 
         return view ;
     }
@@ -84,23 +105,92 @@ public class NotificationsFragment extends Fragment {
 
         protected void onPostExecute(Boolean success) {
             super.onPostExecute(success);
+            ArrayList<DatabaseModel> mod;
+            DatabaseRecyclerViewAdapter databaseRecyclerViewAdapter = new DatabaseRecyclerViewAdapter();
+            recyclerView.setAdapter(databaseRecyclerViewAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
             TextView id = (TextView) getView().findViewById(R.id.tv_id);
             TextView color = (TextView) getView().findViewById(R.id.tv_color);
             TextView make = (TextView) getView().findViewById(R.id.tv_make);
             TextView model = (TextView) getView().findViewById(R.id.tv_model);
             TextView price = (TextView) getView().findViewById(R.id.tv_price);
-            ImageView resource = (ImageView) getView().findViewById(R.id.iv_resource);
             TextView desc = (TextView) getView().findViewById(R.id.tv_description);
+            ImageView resource = (ImageView) getView().findViewById(R.id.iv_resource);
 
+            String res = "";
+
+            /**
+             * getColumnIndex(String columnName);
+             * Returns the zero-based index for the given column name, or -1 if the column name doesn't exist.
+             *
+             * int index_id = cursor.getColumnIndex("ID");
+             * (index_id == 0)  true
+             */
+            int index_id = cursor.getColumnIndex("ID");
+            int index_color = cursor.getColumnIndex("COLOR");
+            int index_make = cursor.getColumnIndex("MAKE");
+            int index_model = cursor.getColumnIndex("MODEL");
+            int index_price = cursor.getColumnIndex("PRICE");
+            int index_description = cursor.getColumnIndex("DESCRIPTION");
+            int index_resource = cursor.getColumnIndex("RESOURCE");
+
+            for(cursor.moveToFirst(); !(cursor.isAfterLast()); cursor.moveToNext()) {
+                res = res + cursor.getString(index_id) + "\n";
+                id.setText(res);
+
+                res = res + cursor.getString(index_color) + "\n";
+                color.setText(res);
+
+                res = res + cursor.getString(index_make) + "\n";
+                make.setText(res);
+
+                res = res + cursor.getString(index_model) + "\n";
+                make.setText(res);
+
+                res = res + cursor.getString(index_price) + "\n";
+                make.setText(res);
+
+                res = res + cursor.getString(index_description) + "\n";
+                desc.setText(res);
+
+                res = res + cursor.getString(index_resource) + "\n";
+                resource.setImageResource(cursor.getInt(index_resource));
+
+                // id.setText(res);
+                //color.setText(cursor.getString(index_color));
+            }
+
+            // color.setText(color_res);
+
+            // Log.i("log", "id  => " + id_res);
+            // Log.i("log", "color => " + color_res);
+
+                /*
+                {
+                    mod = new ArrayList<>();
+                    mod.get(0).setId(cursor.getInt(0));
+                    mod.get(0).setColor(cursor.getString(1));
+                    mod.get(0).setMake(cursor.getString(2));
+                    mod.get(0).setModel(cursor.getString(3));
+                    mod.get(0).setPrice(cursor.getString(4));
+                    mod.get(0).setDescription(cursor.getString(5));
+                    mod.get(0).setResource(cursor.getInt(6));
+                }
+                 */
+
+
+            /*
             if(cursor.moveToLast()) {
-                int record_str = cursor.getInt(0);
-                String color_str = cursor.getString(1);
-                String make_str = cursor.getString(2);
-                String model_str = cursor.getString(3);
-                String price_str = cursor.getString(4);
-                String description_str = cursor.getString(5);
-                int resource_str = cursor.getInt(6);
+                record_str = cursor.getInt(0);
+                color_str = cursor.getString(1);
+                make_str = cursor.getString(2);
+                model_str = cursor.getString(3);
+                price_str = cursor.getString(4);
+                description_str = cursor.getString(5);
+                resource_str = cursor.getInt(6);
+
+                mod.add(new DatabaseModel(resource_str, color_str, make_str, model_str, price_str, description_str, resource_str));
 
                 id.setText(Integer.toString(record_str));
                 color.setText(color_str);
@@ -110,8 +200,36 @@ public class NotificationsFragment extends Fragment {
                 desc.setText(description_str);
                 resource.setImageResource(resource_str);
             }
+            */
+
             cursor.close();
             db.close();
+        }
+    }
+
+    public class DatabaseRecyclerViewAdapter extends RecyclerView.Adapter<DatabaseRecyclerViewAdapter.ViewHolder> {
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            Log.i("log", "[ onCreateViewHolder loaded ]");
+            return null;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull DatabaseRecyclerViewAdapter.ViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return 0;
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
         }
     }
 }
