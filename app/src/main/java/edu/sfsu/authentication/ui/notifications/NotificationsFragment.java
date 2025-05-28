@@ -31,13 +31,6 @@ import edu.sfsu.authentication.model.home.DatabaseModel;
 
 public class NotificationsFragment extends Fragment {
 
-    public int record_str;
-    public String color_str;
-    public String make_str;
-    public String model_str;
-    public String price_str;
-    public String description_str;
-    public int resource_str;
 
     private FragmentNotificationsBinding binding;
     public RecyclerView recyclerView;
@@ -45,14 +38,9 @@ public class NotificationsFragment extends Fragment {
     @SuppressLint("Range")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        // RecyclerView Implementation
-        // RecyclerView recyclerView = (RecyclerView)getLayoutInflater().inflate(R.layout.card, container, false);
-        // DatabaseRecyclerViewAdapter databaseRecyclerViewAdapter = new DatabaseRecyclerViewAdapter();
-
         NotificationsViewModel notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
 
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
-        // View view = binding.getRoot();
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         recyclerView = view.findViewById(R.id.rv_homeFragment);
 
@@ -110,6 +98,16 @@ public class NotificationsFragment extends Fragment {
             recyclerView.setAdapter(databaseRecyclerViewAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+            /*
+            int record_str;
+            String color_str;
+            String make_str;
+            String model_str;
+            String price_str;
+            String description_str;
+            int resource_str;
+            */
+
             TextView id = (TextView) getView().findViewById(R.id.tv_id);
             TextView color = (TextView) getView().findViewById(R.id.tv_color);
             TextView make = (TextView) getView().findViewById(R.id.tv_make);
@@ -127,6 +125,9 @@ public class NotificationsFragment extends Fragment {
              * int index_id = cursor.getColumnIndex("ID");
              * (index_id == 0)  true
              */
+
+            // uncomment to show database without image.
+            /*
             int index_id = cursor.getColumnIndex("ID");
             int index_color = cursor.getColumnIndex("COLOR");
             int index_make = cursor.getColumnIndex("MAKE");
@@ -146,51 +147,35 @@ public class NotificationsFragment extends Fragment {
                 make.setText(res);
 
                 res = res + cursor.getString(index_model) + "\n";
-                make.setText(res);
+                model.setText(res);
 
                 res = res + cursor.getString(index_price) + "\n";
-                make.setText(res);
+                price.setText(res);
 
                 res = res + cursor.getString(index_description) + "\n";
                 desc.setText(res);
 
-                res = res + cursor.getString(index_resource) + "\n";
-                resource.setImageResource(cursor.getInt(index_resource));
+                res = res + cursor.getInt(index_resource) + "\n";
+
+                // resource.setImageResource(resource_str);
+                // resource.setImageResource(cursor.getInt(index_resource));
+
+                Log.i("log", "resource_str -> " + resource_str);
 
                 // id.setText(res);
                 //color.setText(cursor.getString(index_color));
             }
+            */
 
-            // color.setText(color_res);
-
-            // Log.i("log", "id  => " + id_res);
-            // Log.i("log", "color => " + color_res);
-
-                /*
-                {
-                    mod = new ArrayList<>();
-                    mod.get(0).setId(cursor.getInt(0));
-                    mod.get(0).setColor(cursor.getString(1));
-                    mod.get(0).setMake(cursor.getString(2));
-                    mod.get(0).setModel(cursor.getString(3));
-                    mod.get(0).setPrice(cursor.getString(4));
-                    mod.get(0).setDescription(cursor.getString(5));
-                    mod.get(0).setResource(cursor.getInt(6));
-                }
-                 */
-
-
-            /*
+            // Show last record along with image.
             if(cursor.moveToLast()) {
-                record_str = cursor.getInt(0);
-                color_str = cursor.getString(1);
-                make_str = cursor.getString(2);
-                model_str = cursor.getString(3);
-                price_str = cursor.getString(4);
-                description_str = cursor.getString(5);
-                resource_str = cursor.getInt(6);
-
-                mod.add(new DatabaseModel(resource_str, color_str, make_str, model_str, price_str, description_str, resource_str));
+                int record_str = cursor.getInt(0);
+                String color_str = cursor.getString(1);
+                String make_str = cursor.getString(2);
+                String model_str = cursor.getString(3);
+                String price_str = cursor.getString(4);
+                String description_str = cursor.getString(5);
+                int resource_str = cursor.getInt(6);
 
                 id.setText(Integer.toString(record_str));
                 color.setText(color_str);
@@ -200,7 +185,6 @@ public class NotificationsFragment extends Fragment {
                 desc.setText(description_str);
                 resource.setImageResource(resource_str);
             }
-            */
 
             cursor.close();
             db.close();

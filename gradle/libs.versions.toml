@@ -6,13 +6,26 @@ espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 constraintlayout = "2.2.1"
-lifecycleLivedataKtx = "2.8.7"
-lifecycleViewmodelKtx = "2.8.7"
-navigationFragment = "2.8.9"
-navigationUi = "2.8.9"
+lifecycleLivedataKtx = "2.9.0"
+lifecycleViewmodelKtx = "2.9.0"
+navigationFragment = "2.9.0"
+navigationUi = "2.9.0"
 okhttp3 = "4.12.0"
+picasso = "2.8"
+retrofit = "2.11.0"
+roomVersion = "2.7.1"
+volley = "1.2.1"
+activity = "1.10.1"
 
 [libraries]
+androidx-room-guava = { module = "androidx.room:room-guava", version.ref = "roomVersion" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomVersion" }
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "roomVersion" }
+androidx-room-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
+androidx-room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "roomVersion" }
+androidx-room-rxjava3 = { module = "androidx.room:room-rxjava3", version.ref = "roomVersion" }
+androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "roomVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -24,5 +37,10 @@ lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-view
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3" }
+picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

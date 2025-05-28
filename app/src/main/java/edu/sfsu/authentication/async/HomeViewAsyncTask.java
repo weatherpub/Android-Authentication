@@ -17,12 +17,15 @@ import edu.sfsu.authentication.vm.DrinkViewModel;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import retrofit2.Retrofit;
 
+// Make a new request on a thread.
 public class HomeViewAsyncTask extends ViewModel {
 
     private static ArrayList<DrinkModel> model = null;
     private static MutableLiveData<ArrayList<DrinkModel>> liveData = null;
 
+    // retrieve data from liveData
     public static MutableLiveData<ArrayList<DrinkModel>> getLiveData() {
         return liveData;
     }
